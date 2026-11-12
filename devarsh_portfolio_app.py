@@ -1,108 +1,224 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import requests
-import json
+import ast
 
 st.set_page_config(
-    page_title="Devarsh Gandhi | Digital Product Owner & AI Architect",
-    page_icon="🚀",
+    page_title="DEVARSH | Digital Product Owner & AI Architect",
+    page_icon="🎬",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
+# -----------------------------------------------------------------------------
+# NETFLIX-INSPIRED HIGH-CONTRAST CSS & TYPOGRAPHY
+# -----------------------------------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap');
 
-    html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #030712;
+    /* Global High-Contrast Dark Background & Crisp White Text */
+    html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        background-color: #141414 !important;
+        color: #FFFFFF !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    /* Force all Streamlit markdown, text, labels, and headers to high-contrast white/light gray */
+    p, span, div, label, li {
         color: #F3F4F6;
     }
-
-    .stApp {
-        background: radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
-                    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
-                    #030712;
+    h1, h2, h3, h4, h5, h6 {
+        color: #FFFFFF !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 800 !important;
     }
 
-    .glass-card {
-        background: rgba(17, 24, 39, 0.72);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .glass-card:hover {
-        border-color: rgba(6, 182, 212, 0.45);
-        transform: translateY(-2px);
+    /* Netflix Wordmark Logo */
+    .netflix-logo {
+        font-family: 'Bebas Neue', sans-serif !important;
+        font-size: 2.6rem !important;
+        letter-spacing: 0.08em !important;
+        color: #E50914 !important;
+        line-height: 1 !important;
+        text-shadow: 0 2px 10px rgba(229, 9, 20, 0.35);
     }
 
-    .glass-card-glow {
-        background: rgba(17, 24, 39, 0.85);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(6, 182, 212, 0.35);
-        box-shadow: 0 0 30px rgba(6, 182, 212, 0.12);
-        border-radius: 20px;
-        padding: 1.75rem;
-        margin-bottom: 1.25rem;
+    /* Row Section Headings (Netflix Style) */
+    .row-title {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.45rem !important;
+        font-weight: 800 !important;
+        color: #FFFFFF !important;
+        margin-top: 1.8rem !important;
+        margin-bottom: 0.85rem !important;
+        letter-spacing: -0.01em;
     }
 
-    .gradient-text {
-        background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 800;
-    }
-
-    .mono-badge {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.72rem;
-        padding: 0.25rem 0.65rem;
-        border-radius: 9999px;
-        background: rgba(6, 182, 212, 0.12);
-        color: #22d3ee;
-        border: 1px solid rgba(6, 182, 212, 0.3);
-        display: inline-block;
-        margin-right: 0.4rem;
-        margin-bottom: 0.4rem;
-    }
-
-    .metric-box {
-        background: rgba(11, 15, 25, 0.85);
-        border: 1px solid rgba(55, 65, 81, 0.6);
-        border-radius: 14px;
-        padding: 1rem;
-        text-align: center;
-    }
-    .metric-val {
-        font-size: 1.65rem;
-        font-weight: 800;
-        color: #06b6d4;
-        font-family: 'JetBrains Mono', monospace;
-    }
-    .metric-lbl {
-        font-size: 0.78rem;
-        color: #9CA3AF;
-        margin-top: 0.2rem;
-    }
-
-    section[data-testid="stSidebar"] {
-        background-color: #0B0F19;
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .stButton > button {
+    /* Featured Billboard Hero Banner */
+    .billboard {
+        background: linear-gradient(90deg, #0B0B0B 0%, rgba(20, 20, 20, 0.94) 58%, rgba(229, 9, 20, 0.16) 100%);
+        border: 1px solid #2A2A2A;
+        border-left: 6px solid #E50914;
         border-radius: 12px;
-        font-weight: 600;
-        transition: all 0.2s ease;
+        padding: 2.5rem 2.25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75);
+    }
+    .billboard-badge {
+        display: inline-block;
+        background-color: #E50914;
+        color: #FFFFFF !important;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        padding: 0.25rem 0.65rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        margin-bottom: 0.75rem;
+    }
+    .billboard-title {
+        font-family: 'Bebas Neue', sans-serif !important;
+        font-size: 3.6rem !important;
+        letter-spacing: 0.04em;
+        color: #FFFFFF !important;
+        line-height: 1.05 !important;
+        margin: 0.2rem 0 0.6rem 0 !important;
+    }
+    .billboard-meta {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #46D369 !important; /* Netflix 99% Match Green */
+        margin-bottom: 1rem;
+    }
+    .billboard-desc {
+        font-size: 1.08rem !important;
+        line-height: 1.65 !important;
+        color: #E5E5E5 !important;
+        max-width: 820px;
+    }
+
+    /* Netflix Content Cards */
+    .nf-card {
+        background-color: #1F1F1F;
+        border: 1px solid #333333;
+        border-radius: 8px;
+        padding: 1.35rem;
+        margin-bottom: 0.85rem;
+        transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+    }
+    .nf-card:hover {
+        transform: scale(1.02);
+        border-color: #E50914;
+        background-color: #262626;
+    }
+    .nf-tag {
+        display: inline-block;
+        background-color: #2E2E2E;
+        color: #FFFFFF !important;
+        border: 1px solid #4B5563;
+        font-size: 0.74rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        margin-right: 0.35rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+    }
+    .nf-tag-red {
+        background-color: #E50914 !important;
+        border-color: #E50914 !important;
+        color: #FFFFFF !important;
+    }
+    .nf-card-title {
+        font-size: 1.18rem !important;
+        font-weight: 800 !important;
+        color: #FFFFFF !important;
+        margin: 0.35rem 0 0.5rem 0 !important;
+    }
+    .nf-card-text {
+        font-size: 0.96rem !important;
+        line-height: 1.55 !important;
+        color: #D4D4D4 !important;
+    }
+
+    /* Top 10 / KPI Stat Cards */
+    .top10-box {
+        background-color: #181818;
+        border: 1px solid #2F2F2F;
+        border-radius: 8px;
+        padding: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+    }
+    .top10-num {
+        font-family: 'Bebas Neue', sans-serif !important;
+        font-size: 3.1rem !important;
+        line-height: 0.95 !important;
+        color: #E50914 !important;
+    }
+    .top10-stat {
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+        color: #FFFFFF !important;
+    }
+    .top10-sub {
+        font-size: 0.82rem !important;
+        color: #B3B3B3 !important;
+    }
+
+    /* Primary Netflix Red Buttons & Link Buttons */
+    .stButton > button, [data-testid="stLinkButton"] > a {
+        background-color: #E50914 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        padding: 0.55rem 1.2rem !important;
+        transition: background-color 0.2s ease !important;
+    }
+    .stButton > button:hover, [data-testid="stLinkButton"] > a:hover {
+        background-color: #B81D24 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Radio Profile Switcher Styling */
+    div[role="radiogroup"] label {
+        background-color: #1F1F1F !important;
+        border: 1px solid #383838 !important;
+        border-radius: 6px !important;
+        padding: 0.45rem 0.9rem !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
+    div[role="radiogroup"] label[data-checked="true"] {
+        background-color: #E50914 !important;
+        border-color: #E50914 !important;
+    }
+
+    /* Inputs & Expanders */
+    .stTextInput input, .stTextArea textarea {
+        background-color: #1F1F1F !important;
+        color: #FFFFFF !important;
+        border: 1px solid #404040 !important;
+    }
+    div[data-testid="stExpander"] {
+        background-color: #1B1B1B !important;
+        border: 1px solid #333333 !important;
+        border-radius: 8px !important;
+    }
+    div[data-testid="stExpander"] summary p {
+        color: #FFFFFF !important;
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
+# -----------------------------------------------------------------------------
+# SESSION STATE DATA
+# -----------------------------------------------------------------------------
 if "repos" not in st.session_state:
     st.session_state.repos = [
         {
@@ -129,369 +245,235 @@ if "websites" not in st.session_state:
     st.session_state.websites = [
         {
             "name": "ScopeForge AI Web Agent",
-            "badge": "Live Streamlit App",
+            "badge": "LIVE ORIGINAL APP",
             "desc": "Production AI workflow engine turning raw transcripts & specs into BRDs, gap analyses, and Jira/ADO backlogs.",
             "url": "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/"
         },
         {
             "name": "LinkedIn Executive Profile",
-            "badge": "Professional Network",
+            "badge": "NETWORK",
             "desc": "Connect with Devarsh Gandhi — PMP® Certified Digital Product Owner & Senior Business Systems Analyst.",
             "url": "https://linkedin.com/in/devarsh-gandhi-pmp-2b1083144"
         }
     ]
 
-if "interests" not in st.session_state:
-    st.session_state.interests = [
-        {"title": "Commercial & Demand Planning", "detail": "Inventory optimization, forecasting workflows, and ERP/API ecosystem reliability."},
-        {"title": "AI Agent Productization", "detail": "Building LLM-powered workflows (Claude/Streamlit) that eliminate manual analyst toil."},
-        {"title": "Lean Six Sigma & Process ROI", "detail": "Data-driven process audits delivering measurable cycle-time and efficiency gains."},
-        {"title": "Agile Product Strategy", "detail": "Roadmapping, backlog prioritization, and cross-functional alignment without direct authority."}
-    ]
-
-with st.sidebar:
-    st.markdown("""
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:1rem;">
-            <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg,#06b6d4,#3b82f6,#8b5cf6); display:flex; align-items:center; justify-content:center; font-weight:800; color:white;">DG</div>
-            <div>
-                <div style="font-weight:800; font-size:1rem; letter-spacing:0.05em;">DEVARSH.OS</div>
-                <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#22d3ee;">v3.4 · Streamlit Edition</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    nav_section = st.radio(
-        "Navigate OS",
-        [
-            "🚀 Command Stage (Home)",
-            "🤖 ScopeForge AI Agent",
-            "📊 Enterprise Case Studies",
-            "💻 GitHub & Repositories",
-            "🌐 Websites & Focus Areas",
-            "🛠️ Portfolio Studio (Customize)"
-        ]
+# -----------------------------------------------------------------------------
+# TOP NETFLIX NAVIGATION BAR
+# -----------------------------------------------------------------------------
+nav_c1, nav_c2, nav_c3 = st.columns([1.2, 2.5, 1.3])
+with nav_c1:
+    st.markdown('<div class="netflix-logo">DEVARSHFLIX</div>', unsafe_allow_html=True)
+with nav_c2:
+    active_profile = st.radio(
+        "Who's Watching? (Select Role Profile)",
+        ["Digital Product Owner", "Senior Business Analyst", "Program Delivery (PMP®)"],
+        horizontal=True,
+        label_visibility="collapsed"
     )
+with nav_c3:
+    st.link_button("▶ Launch ScopeForge AI", "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/", use_container_width=True)
 
-    st.divider()
-    st.markdown("**📍 Location:** Quincy, MA (Greater Boston)")
-    st.markdown("**🎓 Credentials:** PMP® · Lean Six Sigma GB · MS Marketing")
-    st.markdown("**📧 Contact:** devarsh.22.dg@gmail.com")
-    st.link_button("Launch ScopeForge Live ↗", "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/", use_container_width=True)
+# -----------------------------------------------------------------------------
+# FEATURED BILLBOARD HERO (NETFLIX BANNER)
+# -----------------------------------------------------------------------------
+profile_summaries = {
+    "Digital Product Owner": (
+        "PMP®-certified Digital Product Owner & Senior Business Systems Analyst driving enterprise technology products, "
+        "data-intensive ecosystems, and full-lifecycle Agile delivery. Proven track record owning product vision, "
+        "roadmaps, and prioritized backlogs from concept through KPI value realization."
+    ),
+    "Senior Business Analyst": (
+        "Senior Business Analyst specializing in structured discovery, end-to-end Requirements Traceability Matrices (RTM), "
+        "BPMN/UML process modeling, and translating ambiguous enterprise workflows into acceptance-ready epics and user stories."
+    ),
+    "Program Delivery (PMP®)": (
+        "PMP®-certified delivery leader with 5+ years managing multi-vendor, matrixed IT programs — delivering 3 consecutive "
+        "enterprise platform releases on schedule and within budget with zero scope creep and zero missed go-live dates."
+    )
+}
 
-def render_3d_torus():
-    torus_html = """
-    <div style="background: rgba(17,24,39,0.85); border: 1px solid rgba(6,182,212,0.35); border-radius: 20px; padding: 14px; text-align: center; box-shadow: 0 0 25px rgba(6,182,212,0.15); font-family: 'JetBrains Mono', monospace;">
-        <div style="position: relative; width: 320px; height: 320px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 320 320" style="position: absolute; inset: 0; width: 100%; height: 100%; animation: spinSlow 24s linear infinite;">
-                <defs>
-                    <path id="orbitPath" d="M 160, 160 m -132, 0 a 132,132 0 1,1 264,0 a 132,132 0 1,1 -264,0" />
-                </defs>
-                <text fill="#22d3ee" font-size="10.5" font-weight="700" letter-spacing="3.2">
-                    <textPath href="#orbitPath" startOffset="0%">
-                        DIGITAL PRODUCT OWNER • ZERO SCOPE CREEP • AI WORKFLOWS • DATA INTEGRITY •
-                    </textPath>
-                </text>
-            </svg>
-            <canvas id="donutCanvas" width="260" height="260" style="cursor: grab; z-index: 2;"></canvas>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#22d3ee; background:#030712; padding:6px 12px; border-radius:10px; border:1px solid rgba(6,182,212,0.25); margin-top:6px;">
-            <span>3D TORUS SHADER · 60 FPS</span>
-            <button onclick="cycleShader()" style="background:none; border:none; color:#38bdf8; text-decoration:underline; cursor:pointer; font-family:inherit; font-size:11px;">SWITCH SHADER</button>
+st.markdown(f"""
+<div class="billboard">
+    <div class="billboard-badge">N SERIES · FEATURED CANDIDATE</div>
+    <div class="billboard-title">DEVARSH GANDHI</div>
+    <div class="billboard-meta">99% Match &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; PMP® Certified &nbsp;·&nbsp; Lean Six Sigma Green Belt &nbsp;·&nbsp; Quincy, MA</div>
+    <div class="billboard-desc">{profile_summaries[active_profile]}</div>
+</div>
+""", unsafe_allow_html=True)
+
+# -----------------------------------------------------------------------------
+# ROW 1: TOP 10 CAREER HIGHLIGHTS (METRICS)
+# -----------------------------------------------------------------------------
+st.markdown('<div class="row-title">Top Impact Metrics in Product & Enterprise Delivery</div>', unsafe_allow_html=True)
+t1, t2, t3, t4 = st.columns(4)
+with t1:
+    st.markdown('<div class="top10-box"><div class="top10-num">1</div><div><div class="top10-stat">3 / 3 Releases</div><div class="top10-sub">100% On-Time Go-Lives</div></div></div>', unsafe_allow_html=True)
+with t2:
+    st.markdown('<div class="top10-box"><div class="top10-num">2</div><div><div class="top10-stat">0% Creep</div><div class="top10-sub">Zero Unplanned Scope</div></div></div>', unsafe_allow_html=True)
+with t3:
+    st.markdown('<div class="top10-box"><div class="top10-num">3</div><div><div class="top10-stat">+20% ROI</div><div class="top10-sub">Workflow Efficiency Gain</div></div></div>', unsafe_allow_html=True)
+with t4:
+    st.markdown('<div class="top10-box"><div class="top10-num">4</div><div><div class="top10-stat">500+ Bugs</div><div class="top10-sub">Cleared in Under 4 Mos</div></div></div>', unsafe_allow_html=True)
+
+# -----------------------------------------------------------------------------
+# ROW 2: FEATURED ORIGINAL — SCOPEFORGE AI AGENT
+# -----------------------------------------------------------------------------
+st.markdown('<div class="row-title">Featured Original: ScopeForge AI Workflow Engine</div>', unsafe_allow_html=True)
+sf_c1, sf_c2 = st.columns([1.45, 1], gap="large")
+
+with sf_c1:
+    st.markdown("""
+    <div class="nf-card">
+        <span class="nf-tag nf-tag-red">LIVE AI PRODUCT</span>
+        <span class="nf-tag">PYTHON</span>
+        <span class="nf-tag">STREAMLIT</span>
+        <span class="nf-tag">ANTHROPIC CLAUDE API</span>
+        <div class="nf-card-title">ScopeForge — End-to-End Business Analysis & Backlog Automation</div>
+        <div class="nf-card-text">
+            A BA's day is reading messy source material — meeting transcripts, draft requirements, stakeholder docs — and turning it into structured deliverables. 
+            ScopeForge keeps that whole workflow in one place (~3,200 lines of Python), generating BRDs, FRDs, MoSCoW priorities, Gherkin acceptance criteria, 
+            Visio Data Visualizer process maps, and Jira/Azure DevOps CSV exports with zero persistent client document storage.
         </div>
     </div>
-    <style>
-        @keyframes spinSlow { 100% { transform: rotate(360deg); } }
-    </style>
-    <script>
-        const canvas = document.getElementById('donutCanvas');
-        const ctx = canvas.getContext('2d');
-        let A = 0, B = 0, shaderMode = 0;
-        const colors = ['#06b6d4', '#3b82f6', '#8b5cf6', '#10b981'];
-        function cycleShader() { shaderMode = (shaderMode + 1) % colors.length; }
-        function render() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const w = canvas.width, h = canvas.height;
-            const z = [];
-            A += 0.035; B += 0.018;
-            const cA = Math.cos(A), sA = Math.sin(A), cB = Math.cos(B), sB = Math.sin(B);
-            for (let j = 0; j < 6.28; j += 0.07) {
-                const ct = Math.cos(j), st = Math.sin(j);
-                for (let i = 0; i < 6.28; i += 0.025) {
-                    const sp = Math.sin(i), cp = Math.cos(i);
-                    const h2 = ct + 2;
-                    const D = 1 / (sp * h2 * sA + st * cA + 5);
-                    const t = sp * h2 * cA - st * sA;
-                    const x = Math.floor(w / 2 + 24 * D * (cp * h2 * cB - t * sB));
-                    const y = Math.floor(h / 2 + 24 * D * (cp * h2 * sB + t * cB));
-                    const o = x + w * y;
-                    const N = Math.floor(8 * ((st * sA - sp * ct * cA) * cB - sp * ct * sA - st * cA - cp * ct * sB));
-                    if (h > y && y > 0 && x > 0 && w > x && D > (z[o] || 0)) {
-                        z[o] = D;
-                        ctx.fillStyle = colors[shaderMode];
-                        ctx.globalAlpha = Math.max(0.15, N / 8);
-                        ctx.fillRect(x, y, 2.2, 2.2);
+    """, unsafe_allow_html=True)
+
+    m_col1, m_col2 = st.columns(2)
+    with m_col1:
+        st.markdown("""
+        <div class="nf-card">
+            <div class="nf-card-title">Multimodal Doc Hub & Meeting Intel</div>
+            <div class="nf-card-text">Parses Word, PDF, PPTX, Excel, CSV, and embedded UI screenshots via vision AI; converts transcripts into verified action items.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with m_col2:
+        st.markdown("""
+        <div class="nf-card">
+            <div class="nf-card-title">Gap Detector & Traceability Matrix</div>
+            <div class="nf-card-text">Flags ambiguities, missing NFRs, and scope risks; builds fuzzy-matched Requirement → Story → Test Case RTMs.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+with sf_c2:
+    st.markdown("""
+    <div class="nf-card">
+        <span class="nf-tag nf-tag-red">STREAM NOW</span>
+        <div class="nf-card-title">Launch Live Application</div>
+        <div class="nf-card-text" style="margin-bottom:1rem;">
+            <strong>Endpoint:</strong><br>
+            <span style="color:#FFFFFF; font-weight:600; word-break:break-all;">https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/</span><br><br>
+            Includes embedded <strong>ScopeBot</strong> contextual assistant on every screen and session-isolated privacy architecture.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.link_button("▶ Open ScopeForge Live App", "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/", use_container_width=True)
+
+# -----------------------------------------------------------------------------
+# ROW 3: CASE STUDIES (EPISODES)
+# -----------------------------------------------------------------------------
+st.markdown('<div class="row-title">Season 1: Enterprise Case Studies & Career Episodes</div>', unsafe_allow_html=True)
+
+episodes = [
+    {
+        "ep": "EPISODE 1 · SPRUCE TECHNOLOGY (APR 2024 – PRESENT)",
+        "title": "Digital Product Owner / Senior BA — Multi-Agency IT Modernization",
+        "meta": "3 Releases Delivered · 100% RTM Coverage · -15% Sprint Slippage",
+        "details": "Owned product backlog prioritization and Agile/SAFe ceremonies for an 8-person engineering & QA team. Translated 120+ complex requirements into acceptance-ready user stories, accelerated vendor API integration by 3 weeks, and delivered a 20% workflow efficiency gain."
+    },
+    {
+        "ep": "EPISODE 2 · SYSTECH CORPORATION (FEB 2023 – MAR 2024)",
+        "title": "Business Analyst — Enterprise Product Implementation & UAT",
+        "meta": "500+ Defects Cleared · Under 4 Months · On-Time Launch",
+        "details": "Drove platform stability and release readiness by triaging and clearing a 500+ defect UAT backlog in under 4 months, conducting as-is vs. to-be gap analyses, and authoring 8 persona-based end-user guides."
+    },
+    {
+        "ep": "EPISODE 3 · COLSH CONSULTANTS LLC (MAR 2021 – JAN 2023)",
+        "title": "Business Analyst — Cross-Unit Planning & Process Modeling",
+        "meta": "10+ BPMN/UML Models · 4 Business Units · First-Pass Sign-Off",
+        "details": "Enabled data-driven capacity and resource planning via workforce analytics reporting and produced 10+ BPMN/UML process models across 3 parallel workstreams with zero revision loops."
+    }
+]
+
+for item in episodes:
+    with st.expander(f"{item['ep']}  |  {item['title']}", expanded=True):
+        st.markdown(f"<p style='color:#46D369; font-weight:700; margin-bottom:0.4rem;'>{item['meta']}</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='color:#E5E5E5; font-size:1rem; line-height:1.6;'>{item['details']}</p>", unsafe_allow_html=True)
+
+# -----------------------------------------------------------------------------
+# ROW 4: GITHUB REPOSITORIES & CODEBASE
+# -----------------------------------------------------------------------------
+st.markdown('<div class="row-title">Trending Repositories & Technical Tooling</div>', unsafe_allow_html=True)
+gh_c1, gh_c2 = st.columns([2.5, 1])
+with gh_c1:
+    gh_user = st.text_input("GitHub Username", value="devarsh22", label_visibility="collapsed")
+with gh_c2:
+    if st.button("🔄 Sync Live GitHub Repos", use_container_width=True):
+        try:
+            resp = requests.get(f"https://api.github.com/users/{gh_user}/repos?sort=updated&per_page=6", timeout=5)
+            if resp.status_code == 200 and resp.json():
+                st.session_state.repos = [
+                    {
+                        "name": r["name"],
+                        "tag": r.get("language") or "Repository",
+                        "desc": r.get("description") or "Enterprise & product engineering repository.",
+                        "url": r["html_url"]
                     }
-                }
-            }
-            requestAnimationFrame(render);
-        }
-        render();
-    </script>
-    """
-    components.html(torus_html, height=400)
+                    for r in resp.json()
+                ]
+                st.success(f"Synced repositories for @{gh_user}!")
+            else:
+                st.info("Showing featured repositories.")
+        except Exception:
+            st.info("Showing featured repositories.")
 
-if nav_section == "🚀 Command Stage (Home)":
-    col1, col2 = st.columns([1.35, 1], gap="large")
-
-    with col1:
-        st.markdown('<span class="mono-badge">● AVAILABLE FOR DIGITAL PRODUCT OWNER & PM ROLES</span>', unsafe_allow_html=True)
-        st.markdown("""<h1 style="font-size:3rem; line-height:1.15; margin-top:0.5rem;">Hi, I'm <span class="gradient-text">Devarsh Gandhi</span></h1>""", unsafe_allow_html=True)
-
-        lens = st.radio(
-            "Select Interactive Role Lens:",
-            ["Digital Product Owner", "Senior Business Analyst", "Program Delivery (PMP®)"],
-            horizontal=True
-        )
-
-        lens_copy = {
-            "Digital Product Owner": "PMP®-certified Digital Product Owner & Senior Business Systems Analyst driving enterprise technology products, data-intensive ecosystems, and full-lifecycle Agile delivery. Proven track record owning product vision, roadmaps, and prioritized backlogs from concept through KPI value realization.",
-            "Senior Business Analyst": "Senior Business Analyst specializing in structured discovery, end-to-end Requirements Traceability Matrices (RTM), BPMN/UML process modeling, and translating ambiguous enterprise workflows into acceptance-ready epics and user stories.",
-            "Program Delivery (PMP®)": "PMP®-certified delivery leader with 5+ years managing multi-vendor, matrixed IT programs — delivering 3 consecutive enterprise platform releases on schedule and within budget with zero scope creep and zero missed go-live dates."
-        }
-
-        st.markdown(f'<div class="glass-card"><p style="font-size:1.05rem; line-height:1.65; color:#E5E7EB; margin:0;">{lens_copy[lens]}</p></div>', unsafe_allow_html=True)
-
-        m1, m2, m3, m4 = st.columns(4)
-        with m1:
-            st.markdown('<div class="metric-box"><div class="metric-val">3/3</div><div class="metric-lbl">On-Time Releases</div></div>', unsafe_allow_html=True)
-        with m2:
-            st.markdown('<div class="metric-box"><div class="metric-val">0%</div><div class="metric-lbl">Scope Creep</div></div>', unsafe_allow_html=True)
-        with m3:
-            st.markdown('<div class="metric-box"><div class="metric-val">+20%</div><div class="metric-lbl">Workflow ROI</div></div>', unsafe_allow_html=True)
-        with m4:
-            st.markdown('<div class="metric-box"><div class="metric-val">500+</div><div class="metric-lbl">Defects Triaged</div></div>', unsafe_allow_html=True)
-
-    with col2:
-        render_3d_torus()
-
-    st.divider()
-    st.subheader("Core Competency Matrix")
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.markdown("""
-        <div class="glass-card">
-            <h4 style="color:#22d3ee; margin-top:0;">Product Ownership</h4>
-            <p style="font-size:0.88rem; color:#D1D5DB;">Product Vision & Roadmap · Backlog Prioritization · KPIs & Value Realization · Technical Tradeoffs · Release Readiness</p>
+r_cols = st.columns(3)
+for idx, repo in enumerate(st.session_state.repos):
+    with r_cols[idx % 3]:
+        st.markdown(f"""
+        <div class="nf-card">
+            <span class="nf-tag nf-tag-red">{repo['tag']}</span>
+            <div class="nf-card-title">{repo['name']}</div>
+            <div class="nf-card-text" style="min-height:68px;">{repo['desc']}</div>
         </div>
         """, unsafe_allow_html=True)
-    with c2:
-        st.markdown("""
-        <div class="glass-card">
-            <h4 style="color:#60a5fa; margin-top:0;">Agile & Cross-Functional Leadership</h4>
-            <p style="font-size:0.88rem; color:#D1D5DB;">Scrum / SAFe / Kanban · Epics & User Stories · Influencing Without Authority · Multi-Vendor & Architecture Alignment</p>
+        st.link_button("View Code ↗", repo["url"], use_container_width=True)
+
+# -----------------------------------------------------------------------------
+# ROW 5: WEBSITES, FOCUS AREAS & CUSTOMIZER STUDIO
+# -----------------------------------------------------------------------------
+st.markdown('<div class="row-title">Websites, Interests & Studio Customizer</div>', unsafe_allow_html=True)
+w_cols = st.columns(2)
+for idx, site in enumerate(st.session_state.websites):
+    with w_cols[idx % 2]:
+        st.markdown(f"""
+        <div class="nf-card">
+            <span class="nf-tag nf-tag-red">{site['badge']}</span>
+            <div class="nf-card-title">{site['name']}</div>
+            <div class="nf-card-text">{site['desc']}</div>
         </div>
         """, unsafe_allow_html=True)
-    with c3:
-        st.markdown("""
-        <div class="glass-card">
-            <h4 style="color:#a78bfa; margin-top:0;">Data, Systems & Analytics</h4>
-            <p style="font-size:0.88rem; color:#D1D5DB;">Data Integrity & Governance · ERP / REST API Integrations · SQL · Power BI · Python · Azure DevOps & Jira</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.link_button(f"Open {site['name']} ↗", site["url"], use_container_width=True)
 
-elif nav_section == "🤖 ScopeForge AI Agent":
-    st.markdown('<span class="mono-badge">FLAGSHIP AI PRODUCT · LIVE DEPLOYMENT</span>', unsafe_allow_html=True)
-    st.markdown('<h2>ScopeForge AI — Business Analysis & Product Workflow Engine</h2>', unsafe_allow_html=True)
-
-    col_a, col_b = st.columns([1.4, 1], gap="large")
-    with col_a:
-        st.markdown("""
-        <div class="glass-card-glow">
-            <p style="font-size:1rem; line-height:1.65;">
-                A BA's day is reading messy source material — meeting transcripts, draft requirements, stakeholder docs — and turning it into structured deliverables. 
-                <strong>ScopeForge</strong> keeps that entire workflow in one place, powered by the <strong>Anthropic Claude API</strong> and <strong>Streamlit</strong> (~3,200 lines of Python), with full export to Word, Excel, Visio Data Visualizer, and Jira/Azure DevOps CSV.
-            </p>
-            <div style="margin-top:1rem;">
-                <span class="mono-badge">Python</span>
-                <span class="mono-badge">Streamlit</span>
-                <span class="mono-badge">Anthropic Claude API</span>
-                <span class="mono-badge">Zero-Persistence Privacy</span>
-                <span class="mono-badge">Jira / ADO CSV Export</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown("#### Core Product Modules")
-        mod1, mod2 = st.columns(2)
-        with mod1:
-            st.markdown("""
-            <div class="glass-card">
-                <h5 style="color:#22d3ee; margin:0 0 0.4rem 0;">1. Project & Multimodal Document Hub</h5>
-                <p style="font-size:0.85rem; color:#9CA3AF; margin:0;">Ingests Word, PDF, PPTX, Excel, CSV, or URLs. Extracts tables, comments, strikethroughs, and uses vision AI to parse embedded UI mockups.</p>
-            </div>
-            <div class="glass-card">
-                <h5 style="color:#60a5fa; margin:0 0 0.4rem 0;">3. Elicitation & Gap Detector</h5>
-                <p style="font-size:0.85rem; color:#9CA3AF; margin:0;">Flags ambiguities, missing NFRs, stakeholder conflicts, and scope risks. Generates workshop agendas and MoSCoW prioritization.</p>
-            </div>
-            """, unsafe_allow_html=True)
-        with mod2:
-            st.markdown("""
-            <div class="glass-card">
-                <h5 style="color:#a78bfa; margin:0 0 0.4rem 0;">2. Meeting Intelligence</h5>
-                <p style="font-size:0.85rem; color:#9CA3AF; margin:0;">Converts transcripts into executive summaries, decisions, and verified action items with strict anti-hallucination owner grounding.</p>
-            </div>
-            <div class="glass-card">
-                <h5 style="color:#34d399; margin:0 0 0.4rem 0;">4. Agile Backlog & Traceability Matrix</h5>
-                <p style="font-size:0.85rem; color:#9CA3AF; margin:0;">Generates BRDs, FRDs, Gherkin acceptance criteria, fuzzy-matched Requirement → Story → Test Case RTMs, and change impact analyses.</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-    with col_b:
-        st.markdown("""
-        <div class="glass-card">
-            <h4 style="margin-top:0;">Live Application Endpoint</h4>
-            <code style="display:block; padding:0.75rem; background:#030712; border-radius:10px; color:#22d3ee; word-break:break-all; margin-bottom:1rem;">
-                https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/
-            </code>
-            <p style="font-size:0.85rem; color:#9CA3AF;">
-                <strong>Security & Architecture:</strong> Deliberately architected without a persistent backend database — all client artifacts stay isolated in encrypted user session state. Includes embedded <strong>ScopeBot</strong> contextual assistant on every tab.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        st.link_button("🚀 Open ScopeForge Live App", "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/", use_container_width=True)
-
-elif nav_section == "📊 Enterprise Case Studies":
-    st.markdown('<span class="mono-badge">PROVEN DELIVERY & VALUE REALIZATION</span>', unsafe_allow_html=True)
-    st.markdown('<h2>Enterprise Case Studies</h2>', unsafe_allow_html=True)
-
-    cases = [
-        {
-            "org": "Spruce Technology · Multi-Agency Government IT Modernization",
-            "role": "Digital Product Owner / Senior Business Analyst (Apr 2024 – Present)",
-            "badge": "3 Releases · 0 Scope Creep",
-            "problem": "Multi-agency government modernization program suffered from fragmented requirements, manual workflow bottlenecks, and a 6-week rework cycle across 8 engineers, QA leads, and external vendors.",
-            "action": "Owned product backlog prioritization and Agile/SAFe ceremonies; established a standardized discovery-to-delivery framework; translated 120+ complex requirements into acceptance-ready user stories with 100% RTM coverage.",
-            "outcome": "Delivered 3 successive platform releases on time and on budget with zero missed go-live dates, cut sprint milestone slippage by 15%, accelerated vendor API integration by 3 weeks, and achieved a 20% workflow efficiency gain."
-        },
-        {
-            "org": "Systech Corporation · Enterprise Product Implementation",
-            "role": "Business Analyst (Feb 2023 – Mar 2024)",
-            "badge": "500+ Defects Resolved",
-            "problem": "Critical enterprise product launch was threatened by a backlog of 500+ UAT defects and stakeholder-to-engineering ambiguity.",
-            "action": "Triaged and prioritized defects by business and user impact across QA, engineering, and client leaders; conducted as-is vs. to-be gap analyses and authored 8 persona-based user guides.",
-            "outcome": "Cleared the entire 500+ defect UAT backlog in under 4 months, secured an on-time product launch, and reduced post-launch support volume."
-        },
-        {
-            "org": "COLSH Consultants LLC · Cross-Unit Advisory & Planning",
-            "role": "Business Analyst (Mar 2021 – Jan 2023)",
-            "badge": "First-Pass Sign-Off",
-            "problem": "Four parallel business units and third-party vendors lacked unified process visibility and data-driven capacity planning.",
-            "action": "Built workforce analytics reports for headcount/capacity decisions and authored 10+ BPMN/UML process models across 3 parallel workstreams.",
-            "outcome": "Achieved first-pass stakeholder sign-off with zero revision loops and shortened cross-vendor integration decision cycles."
-        }
-    ]
-
-    for c in cases:
-        with st.expander(f"{c['org']}  —  [{c['badge']}]", expanded=True):
-            st.caption(c["role"])
-            col1, col2, col3 = st.columns(3)
-            col1.markdown(f"**Problem / Context**\n\n{c['problem']}")
-            col2.markdown(f"**Product & BA Execution**\n\n{c['action']}")
-            col3.markdown(f"**Measurable Outcome**\n\n{c['outcome']}")
-
-elif nav_section == "💻 GitHub & Repositories":
-    st.markdown('<span class="mono-badge">OPEN SOURCE & TECHNICAL TOOLING</span>', unsafe_allow_html=True)
-    st.markdown('<h2>GitHub Repositories</h2>', unsafe_allow_html=True)
-
-    col_u1, col_u2 = st.columns([2, 1])
-    with col_u1:
-        gh_user = st.text_input("GitHub Username (Live API Sync)", value="devarsh22")
-    with col_u2:
-        st.write("")
-        st.write("")
-        if st.button("🔄 Sync Live GitHub Repos", use_container_width=True):
-            try:
-                resp = requests.get(f"https://api.github.com/users/{gh_user}/repos?sort=updated&per_page=6", timeout=5)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    if data:
-                        st.session_state.repos = [
-                            {
-                                "name": r["name"],
-                                "tag": r.get("language") or "Repository",
-                                "desc": r.get("description") or "Enterprise & product engineering repository.",
-                                "url": r["html_url"]
-                            }
-                            for r in data
-                        ]
-                        st.success(f"Synced {len(data)} live repositories for @{gh_user}!")
-                    else:
-                        st.info("No public repositories found; showing featured repositories.")
-                else:
-                    st.warning("GitHub API rate limit or user not found — displaying featured repositories.")
-            except Exception as e:
-                st.warning(f"Offline mode: displaying featured repositories ({e}).")
-
-    cols = st.columns(3)
-    for idx, repo in enumerate(st.session_state.repos):
-        with cols[idx % 3]:
-            st.markdown(f"""
-            <div class="glass-card">
-                <span class="mono-badge">{repo['tag']}</span>
-                <h4 style="margin:0.5rem 0;">{repo['name']}</h4>
-                <p style="font-size:0.85rem; color:#9CA3AF; min-height:60px;">{repo['desc']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-            st.link_button("View Repository ↗", repo["url"], use_container_width=True)
-
-elif nav_section == "🌐 Websites & Focus Areas":
-    st.markdown('<span class="mono-badge">DIGITAL PRESENCE & DOMAIN INTERESTS</span>', unsafe_allow_html=True)
-    st.markdown('<h2>Websites & Live Apps</h2>', unsafe_allow_html=True)
-
-    wcols = st.columns(2)
-    for idx, site in enumerate(st.session_state.websites):
-        with wcols[idx % 2]:
-            st.markdown(f"""
-            <div class="glass-card">
-                <span class="mono-badge">{site['badge']}</span>
-                <h4 style="margin:0.5rem 0;">{site['name']}</h4>
-                <p style="font-size:0.88rem; color:#D1D5DB;">{site['desc']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-            st.link_button(f"Visit {site['name']} ↗", site["url"], use_container_width=True)
-
-    st.divider()
-    st.markdown('<h2>Interests & Focus Areas</h2>', unsafe_allow_html=True)
-    icols = st.columns(2)
-    for idx, item in enumerate(st.session_state.interests):
-        with icols[idx % 2]:
-            st.markdown(f"""
-            <div class="glass-card">
-                <h4 style="color:#22d3ee; margin:0 0 0.4rem 0;">{item['title']}</h4>
-                <p style="font-size:0.88rem; color:#9CA3AF; margin:0;">{item['detail']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-elif nav_section == "🛠️ Portfolio Studio (Customize)":
-    st.markdown('<span class="mono-badge">LIVE STUDIO · NO-CODE CUSTOMIZER</span>', unsafe_allow_html=True)
-    st.markdown('<h2>Portfolio Studio</h2>', unsafe_allow_html=True)
-    st.write("Add new GitHub repositories, live web apps, or focus areas directly into your Streamlit session.")
-
-    col_s1, col_s2 = st.columns(2)
-    with col_s1:
-        with st.form("add_repo_form"):
-            st.subheader("➕ Add Repository")
-            r_name = st.text_input("Repository Name", placeholder="e.g., Demand-Forecasting-Engine")
-            r_tag = st.text_input("Tech Stack Tag", placeholder="e.g., Python · SQL")
-            r_desc = st.text_area("Description", placeholder="What problem does this repo solve?")
-            r_url = st.text_input("GitHub URL", value="https://github.com/devarsh22")
-            if st.form_submit_button("Add to Portfolio"):
-                if r_name:
-                    st.session_state.repos.append({"name": r_name, "tag": r_tag, "desc": r_desc, "url": r_url})
-                    st.success(f"Added repository '{r_name}'!")
-
-    with col_s2:
-        with st.form("add_web_form"):
-            st.subheader("➕ Add Website / Live App")
-            w_name = st.text_input("App / Website Name", placeholder="e.g., Power BI Executive Dashboard")
-            w_badge = st.text
+with st.expander("➕ Add Custom Repository or Live Website to This Page"):
+    f_c1, f_c2 = st.columns(2)
+    with f_c1:
+        with st.form("nf_add_repo"):
+            st.markdown("**Add GitHub Repository**")
+            rn = st.text_input("Repo Name")
+            rt = st.text_input("Tech Tag", value="Python")
+            rd = st.text_input("Description")
+            ru = st.text_input("URL", value="https://github.com/devarsh22")
+            if st.form_submit_button("Add Repository"):
+                if rn:
+                    st.session_state.repos.append({"name": rn, "tag": rt, "desc": rd, "url": ru})
+                    st.rerun()
+    with f_c2:
+        with st.form("nf_add_web"):
+            st.markdown("**Add Website / App**")
+            wn = st.text_input("Site Name")
+            wb = st.text_input("Badge", value="LIVE APP")
+            wd = st.text_input("Summary")
+            wu = st.text_input("URL", value="https://")
+            if st.form_submit_button("Add Website"):
+                if wn and wu:
+                    st.session_state.websites.append({"name": wn, "badge": wb, "desc": wd, "url": wu})
+                    st.rerun()
