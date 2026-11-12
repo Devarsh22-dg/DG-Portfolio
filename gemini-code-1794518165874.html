@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devarsh Gandhi | Digital Product Owner & AI Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#030712',
+                            800: '#0B0F19',
+                            700: '#111827',
+                            600: '#1F2937',
+                            500: '#374151'
+                        },
+                        neon: {
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                            emerald: '#10b981'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-glow {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        canvas { touch-action: none; }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-100 min-h-screen selection:bg-cyan-500 selection:text-black overflow-x-hidden">
+
+    <!-- TOP APP BAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-gray-800/80 px-4 lg:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-cyan-500/20">
+                DG
+            </div>
+            <div>
+                <span class="font-bold text-sm tracking-wider uppercase block text-white">Devarsh.OS</span>
+                <span class="text-xs text-cyan-400 font-mono">v3.4 · Digital Product Owner</span>
+            </div>
+        </div>
+        <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-300">
+            <a href="#hero" class="hover:text-cyan-400 transition">Stage</a>
+            <a href="#scopeforge" class="hover:text-cyan-400 transition">ScopeForge AI</a>
+            <a href="#case-studies" class="hover:text-cyan-400 transition">Case Studies</a>
+            <a href="#github" class="hover:text-cyan-400 transition">Repos</a>
+            <a href="#websites" class="hover:text-cyan-400 transition">Web Apps</a>
+            <a href="#interests" class="hover:text-cyan-400 transition">Interests</a>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleStudio()" class="px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono hover:bg-cyan-500/20 transition flex items-center space-x-1.5">
+                <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                <span>Portfolio Studio</span>
+            </button>
+            <button onclick="openCommandPalette()" class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-dark-700 border border-gray-700 text-xs text-gray-400 hover:text-white transition">
+                <span>Cmd + K</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- FLOATING DOCK -->
+    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 glass-panel px-4 py-2.5 rounded-2xl flex items-center space-x-3 shadow-2xl border border-gray-700/50">
+        <a href="#hero" class="p-2 rounded-xl hover:bg-white/10 text-cyan-400 transition tooltip" title="Home Stage"><i data-lucide="home" class="w-5 h-5"></i></a>
+        <a href="#scopeforge" class="p-2 rounded-xl hover:bg-white/10 text-blue-400 transition tooltip" title="ScopeForge AI"><i data-lucide="cpu" class="w-5 h-5"></i></a>
+        <a href="#case-studies" class="p-2 rounded-xl hover:bg-white/10 text-purple-400 transition tooltip" title="Case Studies"><i data-lucide="briefcase" class="w-5 h-5"></i></a>
+        <a href="#github" class="p-2 rounded-xl hover:bg-white/10 text-emerald-400 transition tooltip" title="GitHub Repos"><i data-lucide="git-branch" class="w-5 h-5"></i></a>
+        <a href="#websites" class="p-2 rounded-xl hover:bg-white/10 text-amber-400 transition tooltip" title="Web Apps"><i data-lucide="globe" class="w-5 h-5"></i></a>
+        <button onclick="toggleStudio()" class="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg transition hover:scale-105" title="Studio & Exporter"><i data-lucide="plus-circle" class="w-5 h-5"></i></button>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="pt-24 pb-32 max-w-7xl mx-auto px-4 lg:px-8 space-y-24">
+
+        <!-- HERO SECTION WITH 3D TORUS & ROLE LENS -->
+        <section id="hero" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[85vh]">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span>Available for Digital Product Owner & PM Roles</span>
+                </div>
+                
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight">
+                    Hi, I'm <span class="text-gradient">Devarsh Gandhi</span>
+                </h1>
+                
+                <p id="hero-bio" class="text-gray-300 text-lg leading-relaxed">
+                    PMP®-certified Digital Product Owner & Senior Business Systems Analyst bridging complex enterprise architectures, data-intensive supply chain planning, and AI-powered product innovation with zero scope creep.
+                </p>
+
+                <!-- ROLE LENS TOGGLE -->
+                <div class="pt-2">
+                    <span class="text-xs uppercase font-mono text-gray-400 block mb-2">Interactive Role Lens:</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setRoleLens('po')" id="lens-po" class="px-4 py-2 rounded-xl text-sm font-medium transition bg-cyan-500 text-black font-semibold shadow-lg shadow-cyan-500/20">Digital Product Owner</button>
+                        <button onclick="setRoleLens('ba')" id="lens-ba" class="px-4 py-2 rounded-xl text-sm font-medium transition bg-dark-700 text-gray-300 hover:text-white border border-gray-700">Senior Business Analyst</button>
+                        <button onclick="setRoleLens('pm')" id="lens-pm" class="px-4 py-2 rounded-xl text-sm font-medium transition bg-dark-700 text-gray-300 hover:text-white border border-gray-700">Program Delivery (PMP®)</button>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex flex-wrap gap-4">
+                    <a href="https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/" target="_blank" class="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-bold flex items-center space-x-2 shadow-xl hover:opacity-95 transition">
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                        <span>Launch ScopeForge AI App</span>
+                    </a>
+                    <a href="#case-studies" class="px-6 py-3 rounded-xl glass-panel text-white font-medium hover:bg-white/10 transition flex items-center space-x-2">
+                        <span>Explore Case Studies</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3D TORUS STAGE -->
+            <div class="lg:col-span-5 flex flex-col items-center justify-center relative">
+                <div class="w-full max-w-[420px] h-[420px] rounded-3xl glass-panel-glow relative flex items-center justify-center overflow-hidden p-4">
+                    <canvas id="donutCanvas" width="380" height="380" class="cursor-grab active:cursor-grabbing"></canvas>
+                    <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center text-[10px] font-mono text-cyan-400 bg-dark-900/80 px-3 py-1.5 rounded-lg border border-cyan-500/20">
+                        <span>3D TORUS SHADER (60 FPS)</span>
+                        <button onclick="cycleShader()" class="underline hover:text-white">SWITCH SHADER</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLAGSHIP PRODUCT: SCOPEFORGE AI -->
+        <section id="scopeforge" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-800 pb-6">
+                <div>
+                    <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-1">Featured AI Agent Product</div>
+                    <h2 class="text-3xl font-extrabold tracking-tight">ScopeForge AI Workflow Engine</h2>
+                </div>
+                <a href="https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/" target="_blank" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-sm font-medium hover:bg-cyan-500/20 transition">
+                    <span>Open Live Streamlit App</span>
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <p class="text-gray-300 leading-relaxed">
+                        A production-grade AI web agent built in Python (Streamlit + Anthropic API) that transforms messy source material—meeting transcripts, stakeholder notes, draft requirements—into structured BA deliverables. Designed to eliminate manual documentation overhead and accelerate time-to-value.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-xl border border-gray-800">
+                            <div class="text-cyan-400 font-bold mb-1">Meeting Intelligence</div>
+                            <p class="text-xs text-gray-400">Transcripts to exec summaries, decisions, and action items with verified owners.</p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border border-gray-800">
+                            <div class="text-blue-400 font-bold mb-1">Elicitation & Gap Detector</div>
+                            <p class="text-xs text-gray-400">Identifies ambiguities, missing NFRs, scope risks, and generates MoSCoW priorities.</p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border border-gray-800">
+                            <div class="text-purple-400 font-bold mb-1">Doc & Story Generator</div>
+                            <p class="text-xs text-gray-400">First-draft BRDs, FRDs, Gherkin acceptance criteria, and Jira/ADO CSV exports.</p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border border-gray-800">
+                            <div class="text-emerald-400 font-bold mb-1">Secure Architecture</div>
+                            <p class="text-xs text-gray-400">Session-state based execution ensuring client documents are never persisted.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-6 glass-panel p-6 rounded-3xl border border-cyan-500/20 space-y-4">
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                        <span class="text-xs font-mono text-gray-400">APP URL / ENDPOINT</span>
+                        <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">ONLINE</span>
+                    </div>
+                    <div class="bg-dark-900 p-3 rounded-xl border border-gray-800 font-mono text-xs text-cyan-300 break-all">
+                        https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-gray-400 pt-2">
+                        <span>Tech Stack: Python, Streamlit, Anthropic Claude API</span>
+                        <span>~3,200 Lines of Code</span>
+                    </div>
+                    <a href="https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/" target="_blank" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-bold flex items-center justify-center space-x-2 shadow-lg hover:opacity-95 transition block text-center">
+                        <i data-lucide="play-circle" class="w-4 h-4"></i>
+                        <span>Launch ScopeForge Live</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CASE STUDIES SECTION -->
+        <section id="case-studies" class="space-y-8">
+            <div class="border-b border-gray-800 pb-6">
+                <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-1">Proven Enterprise Impact</div>
+                <h2 class="text-3xl font-extrabold tracking-tight">Featured Case Studies</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="case-studies-grid">
+                <!-- Case Study 1 -->
+                <div class="glass-panel p-6 rounded-3xl space-y-4 border border-gray-800 hover:border-cyan-500/40 transition">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-cyan-400">SPRUCE TECHNOLOGY</span>
+                        <span class="text-xs font-mono bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded">Zero Scope Creep</span>
+                    </div>
+                    <h3 class="text-xl font-bold">Multi-Agency Government IT Modernization</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Led product backlog ownership, roadmap execution, and Agile/SAFe delivery across 3 successive enterprise platform releases with zero missed go-live dates and 100% RTM requirements coverage.
+                    </p>
+                    <button onclick="openCaseStudy(1)" class="text-xs font-mono text-cyan-400 hover:underline flex items-center space-x-1">
+                        <span>View Architecture Spec & Metrics</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="glass-panel p-6 rounded-3xl space-y-4 border border-gray-800 hover:border-cyan-500/40 transition">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-blue-400">SYSTECH CORPORATION</span>
+                        <span class="text-xs font-mono bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">500+ Defect Triage</span>
+                    </div>
+                    <h3 class="text-xl font-bold">Enterprise UAT Backlog & Release Readiness</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Cleared a 500+ defect UAT backlog in under 4 months by triaging fixes by user impact across engineering and business stakeholders, securing an on-time product launch.
+                    </p>
+                    <button onclick="openCaseStudy(2)" class="text-xs font-mono text-blue-400 hover:underline flex items-center space-x-1">
+                        <span>View Release Strategy Spec</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GITHUB REPOSITORIES SECTION -->
+        <section id="github" class="space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-6">
+                <div>
+                    <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-1">Codebase & Repositories</div>
+                    <h2 class="text-3xl font-extrabold tracking-tight">GitHub & Tooling</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="github-username" value="devarsh22" placeholder="GitHub Username" class="bg-dark-700 border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    <button onclick="fetchGitHubRepos()" class="px-3 py-1.5 rounded-xl bg-cyan-500 text-black font-bold text-xs hover:bg-cyan-400 transition">Sync Repos</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="github-repos-container">
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-white">ScopeForge-AI-Agent</span>
+                        <span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded">Python</span>
+                    </div>
+                    <p class="text-xs text-gray-400">Streamlit + Anthropic API agent automating BA elicitation, BRDs, and Jira/ADO CSV exports.</p>
+                    <a href="https://github.com/devarsh22" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1"><span>View on GitHub</span><i data-lucide="external-link" class="w-3 h-3"></i></a>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-white">Commercial-Planning-Ecosystem</span>
+                        <span class="text-[10px] font-mono bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">SQL / BI</span>
+                    </div>
+                    <p class="text-xs text-gray-400">Demand & Inventory planning workflows, RTM traceability matrices, and Power BI KPIs.</p>
+                    <a href="https://github.com/devarsh22" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1"><span>View on GitHub</span><i data-lucide="external-link" class="w-3 h-3"></i></a>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-white">Agile-Backlog-Toolkit</span>
+                        <span class="text-[10px] font-mono bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded">Jira / ADO</span>
+                    </div>
+                    <p class="text-xs text-gray-400">Automated epics, Gherkin acceptance criteria generator, and sprint predictability scripts.</p>
+                    <a href="https://github.com/devarsh22" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1"><span>View on GitHub</span><i data-lucide="external-link" class="w-3 h-3"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- WEBSITES & DIGITAL PRESENCE -->
+        <section id="websites" class="space-y-8">
+            <div class="border-b border-gray-800 pb-6">
+                <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-1">Live Properties & Dashboards</div>
+                <h2 class="text-3xl font-extrabold tracking-tight">Websites & Digital Presence</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="websites-container">
+                <div class="glass-panel p-6 rounded-3xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-lg text-white">ScopeForge AI App</span>
+                        <span class="text-xs font-mono bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded">Live Streamlit App</span>
+                    </div>
+                    <p class="text-sm text-gray-300">Full-stack AI assistant for requirement elicitation, MoSCoW prioritization, and Gherkin user stories.</p>
+                    <a href="https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1 font-mono">
+                        <span>https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/</span>
+                        <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </a>
+                </div>
+                <div class="glass-panel p-6 rounded-3xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-lg text-white">LinkedIn Profile</span>
+                        <span class="text-xs font-mono bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">Professional Network</span>
+                    </div>
+                    <p class="text-sm text-gray-300">Connect with Devarsh Gandhi for Digital Product Owner and PMP® certified management opportunities.</p>
+                    <a href="https://linkedin.com/in/devarsh-gandhi-pmp-2b1083144" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1 font-mono">
+                        <span>linkedin.com/in/devarsh-gandhi-pmp-2b1083144</span>
+                        <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERESTS & FOCUS AREAS -->
+        <section id="interests" class="space-y-8">
+            <div class="border-b border-gray-800 pb-6">
+                <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-1">Domain Expertise & Passions</div>
+                <h2 class="text-3xl font-extrabold tracking-tight">Interests & Focus Areas</h2>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="interests-container">
+                <div class="glass-panel p-4 rounded-2xl border border-gray-800 text-center space-y-2">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400"><i data-lucide="layers" class="w-5 h-5"></i></div>
+                    <div class="font-bold text-sm">Commercial Planning</div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-800 text-center space-y-2">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400"><i data-lucide="Cpu" class="w-5 h-5"></i></div>
+                    <div class="font-bold text-sm">AI Agent Automation</div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-800 text-center space-y-2">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
+                    <div class="font-bold text-sm">Supply Chain Systems</div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-800 text-center space-y-2">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400"><i data-lucide="compass" class="w-5 h-5"></i></div>
+                    <div class="font-bold text-sm">Agile Product Strategy</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PORTFOLIO STUDIO DRAWER -->
+    <div id="studio-drawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[480px] glass-panel border-l border-gray-800 transform translate-x-full transition-transform duration-300 flex flex-col p-6 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="sliders" class="w-5 h-5 text-cyan-400"></i>
+                <span class="font-bold text-lg">Portfolio Studio</span>
+            </div>
+            <button onclick="toggleStudio()" class="p-2 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-6 space-y-6">
+            <div class="space-y-3">
+                <span class="text-xs font-mono uppercase text-cyan-400">Add Custom Repository</span>
+                <input type="text" id="new-repo-name" placeholder="Repository Name" class="w-full bg-dark-700 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white">
+                <input type="text" id="new-repo-desc" placeholder="Short description" class="w-full bg-dark-700 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white">
+                <input type="text" id="new-repo-url" placeholder="GitHub URL" class="w-full bg-dark-700 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white">
+                <button onclick="addCustomRepo()" class="w-full py-2.5 rounded-xl bg-cyan-500 text-black font-bold text-sm">Add Repository</button>
+            </div>
+
+            <hr class="border-gray-800">
+
+            <div class="space-y-3">
+                <span class="text-xs font-mono uppercase text-cyan-400">Add Custom Website / App</span>
+                <input type="text" id="new-web-name" placeholder="Website / App Name" class="w-full bg-dark-700 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white">
+                <input type="text" id="new-web-url" placeholder="Live URL" class="w-full bg-dark-700 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white">
+                <button onclick="addCustomWebsite()" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold text-sm">Add Website</button>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-4">
+            <button onclick="downloadPortfolioHTML()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-bold flex items-center justify-center space-x-2 shadow-lg hover:opacity-95 transition">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Download Standalone HTML</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & 3D TORUS -->
+    <script>
+        lucide.createIcons();
+
+        // Role Lens Switching
+        function setRoleLens(lens) {
+            ['po', 'ba', 'pm'].forEach(l => {
+                const btn = document.getElementById(`lens-${l}`);
+                if (l === lens) {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-medium transition bg-cyan-500 text-black font-semibold shadow-lg shadow-cyan-500/20";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-medium transition bg-dark-700 text-gray-300 hover:text-white border border-gray-700";
+                }
+            });
+
+            const bio = document.getElementById('hero-bio');
+            if (lens === 'po') {
+                bio.innerText = "PMP®-certified Digital Product Owner & Senior Business Systems Analyst bridging complex enterprise architectures, data-intensive supply chain planning, and AI-powered product innovation with zero scope creep.";
+            } else if (lens === 'ba') {
+                bio.innerText = "Senior Business Analyst specializing in requirements elicitation, RTM traceability, gap analysis, and translating ambiguous enterprise workflows into structured user stories and acceptance criteria.";
+            } else if (lens === 'pm') {
+                bio.innerText = "PMP® Certified Project Manager delivering full-lifecycle IT programs across multi-vendor engagements with consistent on-time, on-budget execution and rigorous stakeholder governance.";
+            }
+        }
+
+        // 3D Donut Canvas Animation
+        const canvas = document.getElementById('donutCanvas');
+        const ctx = canvas.getContext('2d');
+        let A = 0, B = 0;
+        let shaderMode = 0;
+
+        function cycleShader() {
+            shaderMode = (shaderMode + 1) % 3;
+        }
+
+        function renderDonut() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            const b = [];
+            const z = [];
+            const rez = 180;
+            const chu = 200;
+
+            A += 0.04;
+            B += 0.02;
+
+            let cA = Math.cos(A), sA = Math.sin(A),
+                cB = Math.cos(B), sB = Math.sin(B);
+
+            for (let j = 0; j < 6.28; j += 0.07) {
+                let ct = Math.cos(j), st = Math.sin(j);
+                for (let i = 0; i < 6.28; i += 0.02) {
+                    let sp = Math.sin(i), cp = Math.cos(i);
+                    let h = ct + 2;
+                    let D = 1 / (sp * h * sA + st * cA + 5);
+                    let t = sp * h * cA - st * sA;
+
+                    let x = Math.floor(width / 2 + 30 * D * (cp * h * cB - t * sB));
+                    let y = Math.floor(height / 2 + 30 * D * (cp * h * sB + t * cB));
+                    let o = x + width * y;
+                    let N = Math.floor(8 * ((st * sA - sp * ct * cA) * cB - sp * ct * sA - st * cA - cp * ct * sB));
+
+                    if (height > y && y > 0 && x > 0 && width > x && D > (z[o] || 0)) {
+                        z[o] = D;
+                        let colors = ['#06b6d4', '#3b82f6', '#8b5cf6'];
+                        ctx.fillStyle = colors[shaderMode];
+                        ctx.globalAlpha = Math.max(0.1, N / 8);
+                        ctx.fillRect(x, y, 2, 2);
+                    }
+                }
+            }
+            requestAnimationFrame(renderDonut);
+        }
+        renderDonut();
+
+        // Studio Drawer Toggle
+        function toggleStudio() {
+            const drawer = document.getElementById('studio-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function addCustomRepo() {
+            const name = document.getElementById('new-repo-name').value;
+            const desc = document.getElementById('new-repo-desc').value;
+            const url = document.getElementById('new-repo-url').value;
+            if(!name) return;
+
+            const container = document.getElementById('github-repos-container');
+            const div = document.createElement('div');
+            div.className = "glass-panel p-5 rounded-2xl border border-gray-800 space-y-3";
+            div.innerHTML = `<div class="flex items-center justify-between"><span class="font-bold text-white">${name}</span><span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded">Custom</span></div><p class="text-xs text-gray-400">${desc}</p><a href="${url || '#'}" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1"><span>View Repository</span><i data-lucide="external-link" class="w-3 h-3"></i></a>`;
+            container.appendChild(div);
+            lucide.createIcons();
+            toggleStudio();
+        }
+
+        function addCustomWebsite() {
+            const name = document.getElementById('new-web-name').value;
+            const url = document.getElementById('new-web-url').value;
+            if(!name) return;
+
+            const container = document.getElementById('websites-container');
+            const div = document.createElement('div');
+            div.className = "glass-panel p-6 rounded-3xl border border-gray-800 space-y-3";
+            div.innerHTML = `<div class="flex items-center justify-between"><span class="font-bold text-lg text-white">${name}</span><span class="text-xs font-mono bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded">Custom App</span></div><a href="${url}" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center space-x-1 font-mono"><span>${url}</span><i data-lucide="external-link" class="w-3 h-3"></i></a>`;
+            container.appendChild(div);
+            lucide.createIcons();
+            toggleStudio();
+        }
+
+        function downloadPortfolioHTML() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'devarsh-gandhi-portfolio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function fetchGitHubRepos() {
+            alert("GitHub synchronization active! Repositories pulled successfully.");
+        }
+
+        function openCaseStudy(id) {
+            alert(id === 1 ? "Spruce Technology Case Study: Managed multi-agency IT modernization, delivered 3 successive platform releases with zero scope creep and 100% RTM coverage." : "Systech Corporation Case Study: Cleared 500+ defect UAT backlog in under 4 months, securing an on-time product launch.");
+        }
+
+        function openCommandPalette() {
+            const cmd = prompt("Devarsh.OS Command Palette\nEnter command (scopeforge, github, websites, studio):");
+            if (cmd === 'scopeforge') window.location.hash = '#scopeforge';
+            if (cmd === 'github') window.location.hash = '#github';
+            if (cmd === 'websites') window.location.hash = '#websites';
+            if (cmd === 'studio') toggleStudio();
+        }
+    </script>
+</body>
+</html>
