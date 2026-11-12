@@ -3,9 +3,6 @@ import streamlit.components.v1 as components
 import requests
 import json
 
-# -----------------------------------------------------------------------------
-# PAGE CONFIGURATION & CUSTOM THEME CSS
-# -----------------------------------------------------------------------------
 st.set_page_config(
     page_title="Devarsh Gandhi | Digital Product Owner & AI Architect",
     page_icon="🚀",
@@ -29,7 +26,6 @@ st.markdown("""
                     #030712;
     }
 
-    /* Glassmorphism Cards */
     .glass-card {
         background: rgba(17, 24, 39, 0.72);
         backdrop-filter: blur(16px);
@@ -94,13 +90,11 @@ st.markdown("""
         margin-top: 0.2rem;
     }
 
-    /* Sidebar styling */
     section[data-testid="stSidebar"] {
         background-color: #0B0F19;
         border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* Button overrides */
     .stButton > button {
         border-radius: 12px;
         font-weight: 600;
@@ -109,9 +103,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------------------------------------------------------
-# SESSION STATE INITIALIZATION (PORTFOLIO STUDIO DATA)
-# -----------------------------------------------------------------------------
 if "repos" not in st.session_state:
     st.session_state.repos = [
         {
@@ -158,9 +149,6 @@ if "interests" not in st.session_state:
         {"title": "Agile Product Strategy", "detail": "Roadmapping, backlog prioritization, and cross-functional alignment without direct authority."}
     ]
 
-# -----------------------------------------------------------------------------
-# SIDEBAR: NAVIGATION & PORTFOLIO STUDIO
-# -----------------------------------------------------------------------------
 with st.sidebar:
     st.markdown("""
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:1rem;">
@@ -190,9 +178,6 @@ with st.sidebar:
     st.markdown("**📧 Contact:** devarsh.22.dg@gmail.com")
     st.link_button("Launch ScopeForge Live ↗", "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/", use_container_width=True)
 
-# -----------------------------------------------------------------------------
-# INTERACTIVE 3D TORUS + ORBITING SVG COMPONENT
-# -----------------------------------------------------------------------------
 def render_3d_torus():
     torus_html = """
     <div style="background: rgba(17,24,39,0.85); border: 1px solid rgba(6,182,212,0.35); border-radius: 20px; padding: 14px; text-align: center; box-shadow: 0 0 25px rgba(6,182,212,0.15); font-family: 'JetBrains Mono', monospace;">
@@ -255,15 +240,12 @@ def render_3d_torus():
     """
     components.html(torus_html, height=400)
 
-# -----------------------------------------------------------------------------
-# SECTION 1: COMMAND STAGE (HOME)
-# -----------------------------------------------------------------------------
 if nav_section == "🚀 Command Stage (Home)":
     col1, col2 = st.columns([1.35, 1], gap="large")
 
     with col1:
         st.markdown('<span class="mono-badge">● AVAILABLE FOR DIGITAL PRODUCT OWNER & PM ROLES</span>', unsafe_allow_html=True)
-        st.markdown('<h1 style="font-size:3rem; line-height:1.15; margin-top:0.5rem;">Hi, I'm <span class="gradient-text">Devarsh Gandhi</span></h1>', unsafe_allow_html=True)
+        st.markdown("""<h1 style="font-size:3rem; line-height:1.15; margin-top:0.5rem;">Hi, I'm <span class="gradient-text">Devarsh Gandhi</span></h1>""", unsafe_allow_html=True)
 
         lens = st.radio(
             "Select Interactive Role Lens:",
@@ -317,9 +299,6 @@ if nav_section == "🚀 Command Stage (Home)":
         </div>
         """, unsafe_allow_html=True)
 
-# -----------------------------------------------------------------------------
-# SECTION 2: SCOPEFORGE AI AGENT
-# -----------------------------------------------------------------------------
 elif nav_section == "🤖 ScopeForge AI Agent":
     st.markdown('<span class="mono-badge">FLAGSHIP AI PRODUCT · LIVE DEPLOYMENT</span>', unsafe_allow_html=True)
     st.markdown('<h2>ScopeForge AI — Business Analysis & Product Workflow Engine</h2>', unsafe_allow_html=True)
@@ -381,9 +360,6 @@ elif nav_section == "🤖 ScopeForge AI Agent":
         """, unsafe_allow_html=True)
         st.link_button("🚀 Open ScopeForge Live App", "https://synergyai-rq3uhz8sth6hvtnzzruhur.streamlit.app/", use_container_width=True)
 
-# -----------------------------------------------------------------------------
-# SECTION 3: ENTERPRISE CASE STUDIES
-# -----------------------------------------------------------------------------
 elif nav_section == "📊 Enterprise Case Studies":
     st.markdown('<span class="mono-badge">PROVEN DELIVERY & VALUE REALIZATION</span>', unsafe_allow_html=True)
     st.markdown('<h2>Enterprise Case Studies</h2>', unsafe_allow_html=True)
@@ -419,19 +395,10 @@ elif nav_section == "📊 Enterprise Case Studies":
         with st.expander(f"{c['org']}  —  [{c['badge']}]", expanded=True):
             st.caption(c["role"])
             col1, col2, col3 = st.columns(3)
-            col1.markdown(f"**Problem / Context**
+            col1.markdown(f"**Problem / Context**\n\n{c['problem']}")
+            col2.markdown(f"**Product & BA Execution**\n\n{c['action']}")
+            col3.markdown(f"**Measurable Outcome**\n\n{c['outcome']}")
 
-{c['problem']}")
-            col2.markdown(f"**Product & BA Execution**
-
-{c['action']}")
-            col3.markdown(f"**Measurable Outcome**
-
-{c['outcome']}")
-
-# -----------------------------------------------------------------------------
-# SECTION 4: GITHUB & REPOSITORIES
-# -----------------------------------------------------------------------------
 elif nav_section == "💻 GitHub & Repositories":
     st.markdown('<span class="mono-badge">OPEN SOURCE & TECHNICAL TOOLING</span>', unsafe_allow_html=True)
     st.markdown('<h2>GitHub Repositories</h2>', unsafe_allow_html=True)
@@ -477,9 +444,6 @@ elif nav_section == "💻 GitHub & Repositories":
             """, unsafe_allow_html=True)
             st.link_button("View Repository ↗", repo["url"], use_container_width=True)
 
-# -----------------------------------------------------------------------------
-# SECTION 5: WEBSITES & FOCUS AREAS
-# -----------------------------------------------------------------------------
 elif nav_section == "🌐 Websites & Focus Areas":
     st.markdown('<span class="mono-badge">DIGITAL PRESENCE & DOMAIN INTERESTS</span>', unsafe_allow_html=True)
     st.markdown('<h2>Websites & Live Apps</h2>', unsafe_allow_html=True)
@@ -508,9 +472,6 @@ elif nav_section == "🌐 Websites & Focus Areas":
             </div>
             """, unsafe_allow_html=True)
 
-# -----------------------------------------------------------------------------
-# SECTION 6: PORTFOLIO STUDIO (CUSTOMIZE & EXPORT)
-# -----------------------------------------------------------------------------
 elif nav_section == "🛠️ Portfolio Studio (Customize)":
     st.markdown('<span class="mono-badge">LIVE STUDIO · NO-CODE CUSTOMIZER</span>', unsafe_allow_html=True)
     st.markdown('<h2>Portfolio Studio</h2>', unsafe_allow_html=True)
@@ -533,10 +494,4 @@ elif nav_section == "🛠️ Portfolio Studio (Customize)":
         with st.form("add_web_form"):
             st.subheader("➕ Add Website / Live App")
             w_name = st.text_input("App / Website Name", placeholder="e.g., Power BI Executive Dashboard")
-            w_badge = st.text_input("Category Badge", placeholder="e.g., Live Dashboard")
-            w_desc = st.text_area("Description", placeholder="Overview of the live link")
-            w_url = st.text_input("Live URL", placeholder="https://...")
-            if st.form_submit_button("Add Website"):
-                if w_name and w_url:
-                    st.session_state.websites.append({"name": w_name, "badge": w_badge, "desc": w_desc, "url": w_url})
-                    st.success(f"Added website '{w_name}'!")
+            w_badge = st.text
